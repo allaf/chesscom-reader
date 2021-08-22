@@ -1,0 +1,25 @@
+{
+  "name": "chesscom-reader",
+  "version": "1.0.0",
+  "description": "",
+  "main": "s",
+  "scripts": {
+    "build": "web-ext build --overwrite-dest --ignore-files test",
+    "start": "web-ext run",
+    "lint-watch": "esw -w",
+    "test:watch": "jest --watch",
+    "test": "jest",
+    "web-ext-lint": "web-ext lint",
+    "lint-fix": "eslint --fix  ",
+    "clear": "jest --clearCache ",
+    "lint": "eslint"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "eslint": "^7.32.0",
+    "eslint-watch": "^7.0.0",
+    "jest": "^27.0.6",
+    "web-ext": "^6.3.0"
+  }
+}
