@@ -53,7 +53,7 @@ brw.runtime.onMessage.addListener((msg) => {
     // console.log('recu : ', msg)
     if (msg.analysisUrl) {
         brw.tabs.create({url: msg.analysisUrl}).then((tab) => {
-            // brw.tabs.remove(msg.tabId)
+            brw.tabs.remove(msg.tabId)
             brw.tabs.executeScript(tab.id, {
                 runAt: 'document_end',
                 code: "setTimeout(()=>document.querySelector('label[for=analyse-toggle-ceval]').click(), 1000)"
