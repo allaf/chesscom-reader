@@ -2,7 +2,7 @@
   "name": "chesscom-reader",
   "version": "1.0.0",
   "description": "",
-  "main": "s",
+  "main": "",
   "scripts": {
     "build": "web-ext build --overwrite-dest --ignore-files test",
     "start": "web-ext run",

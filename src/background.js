@@ -1,14 +1,13 @@
 'use strict';
-
+//TODO recharger le même onglet
 /* eslint-disable no-undef */
 const brw = browser;
 const Utils = utils;
 /* eslint-enable no-undef */
 const URL_MATCH = 'https://www.chess.com/puzzles/rated';
 const URL_LICHESS = 'https://lichess.org/editor';
-// const FILE_JQUERY = '/libs/jquery-3.5.1.min.js';
-const FILE_CONTENT_SCRIPT_CHESSCOM = '/src/content_script_chesscom.js';
-const FILE_CONTENT_SCRIPT_LICHESS = '/src/content_script_lichess.js';
+const FILE_CONTENT_SCRIPT_CHESSCOM = '/src/content_chesscom.js';
+const FILE_CONTENT_SCRIPT_LICHESS = '/src/content_lichess_editor.js';
 
 
 function urlMatches(url) {
@@ -17,7 +16,6 @@ function urlMatches(url) {
 
 function initializePageAction(tab) {
     if (urlMatches(tab.url)) {
-        brw.pageAction.setTitle({tabId: tab.id, title: 'chesscom poc'});
         brw.pageAction.show(tab.id);
     }
 }
@@ -50,30 +48,18 @@ brw.pageAction.onClicked.addListener((tab) => {
 });
 
 brw.runtime.onMessage.addListener((msg) => {
-    // console.log('recu : ', msg)
     if (msg.analysisUrl) {
-        brw.tabs.create({url: msg.analysisUrl}).then((tab) => {
-            brw.tabs.remove(msg.tabId)
-            brw.tabs.executeScript(tab.id, {
-                runAt: 'document_end',
-                code: "setTimeout(()=>document.querySelector('label[for=analyse-toggle-ceval]').click(), 1000)"
-            })
-        });
+        brw.tabs.update(msg.tabId, {url: msg.analysisUrl});
     } else if (msg.fen) {
         const url = URL_LICHESS + '?fen=' + msg.fen;
-        brw.tabs.create({url}).then((tab) => {
+        brw.tabs.create({url}).then((tab) =>
             brw.tabs.executeScript(tab.id, {
-                    runAt: 'document_end',
-                    file: FILE_CONTENT_SCRIPT_LICHESS,
-                }
-            ).then(() => {
-                setTimeout(()=>
-                    brw.tabs.sendMessage(tab.id, {color: url.slice(-1), tabId: tab.id}),
-                    1000
-                )
-            });
-
-        });
+                runAt: 'document_idle',
+                file: FILE_CONTENT_SCRIPT_LICHESS,
+            }).then(() =>
+                brw.tabs.sendMessage(tab.id, {color: url.slice(-1), tabId: tab.id})
+            )
+        );
     }
 });
 

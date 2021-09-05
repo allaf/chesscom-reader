@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
   "name": "chesscom-reader",
-  "version": "0.1",
-  "description": "poc",
+  "version": "0.3",
+  "description": "puzzle poc",
   "icons": {
     "48": "icons/chess.png"
   },
@@ -12,6 +12,12 @@
       "src/background.js"
     ]
   },
+  "content_scripts": [
+    {
+      "matches": ["https://lichess.org/analysis/*"],
+      "js": ["src/content_lichess_analysis.js"]
+    }
+  ],
   "page_action": {
     "default_icon": "icons/chess.png"
   },
